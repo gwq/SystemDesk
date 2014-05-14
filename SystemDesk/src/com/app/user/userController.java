@@ -1,18 +1,33 @@
 package com.app.user;
 
 
+import java.io.File;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sun.org.glassfish.gmbal.ParameterNames;
 
+//@Scope("prototype") 原型模式：每次请求生成一个controller对象，默认为单例模式，只有一个对象，单例模式下不能有类变量
 @Controller  
 @RequestMapping("/user")  
 public class userController {
@@ -27,7 +42,7 @@ public class userController {
     }  
      
 	@RequestMapping(value = "/config.do", method = RequestMethod.GET)  
-    public ModelAndView userInfo(){  
+    public ModelAndView userInfo(){ 
         ModelAndView mav = new ModelAndView();  
         mav.setViewName("/user/userconfig");
         mav.addObject("methodtype", "GET Method");
@@ -72,6 +87,36 @@ public class userController {
     }  
 	
 	
+	//**文件下载
 	
+	@RequestMapping(value = "/download.do",method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downFile(HttpServletRequest req)  {
+        String downFileName = "";
+//        HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        String path = req.getSession().getServletContext().getRealPath("/download");
+        System.out.println(path);
+        try {
+            downFileName = URLEncoder.encode("1.txt", "UTF-8");//转码解决IE下文件名乱码问题
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Http响应头
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", downFileName);
+
+        try {
+            return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(new File(path + "/" + downFileName)),
+                                              headers,
+                                              HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //日志
+            //TODO
+        }
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "error.txt");
+        return new ResponseEntity<byte[]>("文件不存在.".getBytes(), headers, HttpStatus.OK);
+    }
 	
 }

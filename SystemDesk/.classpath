@@ -4,7 +4,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/antlr-2.7.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/aopalliance-1.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/cglib-2.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/classworlds-1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/com.spket.js_1.6.18.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/com.spket.ui_1.6.18.jar"/>

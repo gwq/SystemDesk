@@ -12,7 +12,7 @@ public class interceptorOne implements HandlerInterceptor{
 			HttpServletResponse arg1, Object arg2, Exception arg3)
 			throws Exception {
 		// TODO Auto-generated method stub
-		
+		 
 	}
 
 	public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1,
